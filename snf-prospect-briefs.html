@@ -1,0 +1,340 @@
+<title>SNF Prospect Briefs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: operator index on the left, call-ready brief on the right; stacks on phones */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --ink:#14222b; --muted:#5b6b73; --line:#dbe3e1;
+  --accent:#0b7a6b; --accent-soft:#e1f1ed; --warn:#a15c07; --warn-soft:#fbf0dd; --info:#3b5bab; --info-soft:#e6ecf8;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f171b; --surface:#16222a; --ink:#e3ece9; --muted:#93a5ab; --line:#26363f;
+  --accent:#4cc4ae; --accent-soft:#163a35; --warn:#f0b35a; --warn-soft:#3a2c14; --info:#93acf0; --info-soft:#1f2a46; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f171b; --surface:#16222a; --ink:#e3ece9; --muted:#93a5ab; --line:#26363f;
+  --accent:#4cc4ae; --accent-soft:#163a35; --warn:#f0b35a; --warn-soft:#3a2c14; --info:#93acf0; --info-soft:#1f2a46; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+header{display:grid;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+.app{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}}
+.index{background:var(--surface);border:1px solid var(--line);border-radius:10px;display:grid;grid-template-rows:auto minmax(0,1fr);max-height:min(78vh,900px);min-width:0}
+@media (max-width:860px){.index{max-height:420px}}
+.controls{display:grid;gap:10px;padding:14px;border-bottom:1px solid var(--line)}
+.controls input[type=search],.controls select{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+.row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row2 select{flex:1 1 150px;width:auto}
+.toggle{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.list{overflow:auto;min-height:0}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 14px;cursor:pointer}
+.item:hover{background:var(--accent-soft)}
+.item[aria-current="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.item .nm{font-weight:600;overflow-wrap:anywhere}
+.item .sub{grid-column:1;font-size:12.5px;color:var(--muted)}
+.score{grid-row:1/3;grid-column:2;align-self:center;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.count{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px clamp(16px,3vw,30px);display:grid;gap:22px;min-width:0}
+.bhead{display:grid;gap:8px}
+.bhead h2{font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,30px);line-height:1.15;margin:0;text-wrap:balance;overflow-wrap:anywhere}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.info{background:var(--info-soft);color:var(--info)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stat{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.stat .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.stat .v{font-family:var(--mono);font-size:19px;font-variant-numeric:tabular-nums}
+.stat .h{font-size:12px;color:var(--muted)}
+section h3{font-family:var(--display);font-weight:500;font-size:17px;margin:0 0 8px}
+.why{margin:0;padding-left:18px;display:grid;gap:7px;max-width:72ch}
+.opener{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;max-width:72ch;white-space:pre-wrap}
+.oprow{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+button.copy{font:inherit;font-weight:600;font-size:13.5px;padding:8px 14px;border-radius:7px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);cursor:pointer}
+button.copy:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.okmsg{font-size:13px;color:var(--accent)}
+.states{font-family:var(--mono);font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.who{margin:0;max-width:72ch}
+.score-break{display:grid;gap:6px;max-width:460px}
+.bar{display:grid;grid-template-columns:120px minmax(0,1fr) 40px;gap:10px;align-items:center;font-size:13px}
+.bar .track{height:7px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar .fill{height:100%;background:var(--accent)}
+.bar .n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tab{font:inherit;font-weight:600;font-size:14px;padding:9px 14px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);cursor:pointer;margin-bottom:-1px}
+.tab[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.market{display:grid;gap:26px;min-width:0}
+.lede.small{font-size:13px;margin:0 0 12px}
+.chart{display:grid;gap:7px;max-width:760px}
+.crow{display:grid;grid-template-columns:34px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:13px}
+.crow .s{font-family:var(--mono);font-weight:500}
+.crow .track{height:14px;background:var(--line);border-radius:3px;overflow:hidden}
+.crow .fill{height:100%;background:var(--accent)}
+.crow .fill.hot{background:var(--warn)}
+.crow .n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+.crow .n b{color:var(--ink);font-weight:500}
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:8px;align-content:start}
+.idea .tag{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.idea h4{font-family:var(--display);font-weight:700;font-size:17px;margin:0;text-wrap:balance}
+.idea p{margin:0;font-size:14px}
+.idea .ch{font-size:13px;color:var(--muted)}
+footer{font-size:12.5px;color:var(--muted);max-width:90ch}
+footer a{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.brief{transition:opacity .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Outbound research · Skilled nursing</div>
+    <h1>SNF Prospect Briefs</h1>
+    <p class="lede">A map of the U.S. skilled nursing market for an AI admissions pitch: where the empty beds are, which campaigns that suggests, and a call-ready brief for every chain with 10+ facilities.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Views">
+    <button type="button" class="tab" id="tab-market" aria-pressed="true">Market view</button>
+    <button type="button" class="tab" id="tab-briefs" aria-pressed="false">Operator briefs</button>
+  </nav>
+
+  <div id="view-market" class="market">
+    <div class="stats" id="mstats"></div>
+    <section>
+      <h3>Empty certified beds on an average day, top 12 states</h3>
+      <p class="lede small">Certified beds minus average daily residents. Bar length is to scale; the figure on the right is occupancy.</p>
+      <div class="chart" id="mchart"></div>
+    </section>
+    <section>
+      <h3>Campaign ideas from the data</h3>
+      <div class="ideas" id="mideas"></div>
+    </section>
+  </div>
+
+  <div class="app" id="view-briefs" hidden>
+    <aside class="index" aria-label="Operators">
+      <div class="controls">
+        <input type="search" id="q" placeholder="Search operator or state (e.g. TX)" aria-label="Search operators">
+        <div class="row2">
+          <select id="sort" aria-label="Sort operators">
+            <option value="fit">Sort: best fit</option>
+            <option value="fac">Sort: most facilities</option>
+            <option value="empty">Sort: most empty beds</option>
+            <option value="turn">Sort: highest turnover</option>
+          </select>
+          <label class="toggle"><input type="checkbox" id="hideCust" checked> Hide current customers</label>
+        </div>
+        <div class="count" id="count"></div>
+      </div>
+      <div class="list" id="list" role="list"></div>
+    </aside>
+
+    <main class="brief" id="brief" aria-live="polite"></main>
+  </div>
+
+  <footer>
+    Source: CMS Nursing Home Provider Information (Care Compare), October 2026 refresh, 14,686 facilities. Occupancy is average daily residents divided by certified beds. Fit score is a simple weighting of size (40), census gap (30), nursing turnover (15) and multi-state footprint (15). "Current customer" means the operator's name appears on exacare.com's customer logos or stories. A concept built from public data; not affiliated with or endorsed by exacare ai.
+  </footer>
+</div>
+
+<script>
+// [name, facilities, certifiedBeds, occupancy%, avgStar, avgShortStayQM, avgNursingTurnover%, ownershipChanges12mo, topStates, stateCount]
+const RAW = [["THE ENSIGN GROUP",347,38069,81,3.3,4.2,44.3,6,"TX:86 CA:76 AZ:40 CO:31 UT:21 WA:17",17],["PACS GROUP",277,31535,89,3,3.9,45.5,0,"CA:133 SC:25 OH:24 CO:19 OR:18 WA:11",16],["LIFE CARE CENTERS OF AMERICA",194,25336,71,3.4,4.3,41.8,0,"TN:26 CO:22 FL:21 IN:15 MA:15 WA:15",26],["GENESIS HEALTHCARE",183,21423,85,2.4,3.2,45.5,0,"PA:37 WV:31 NM:20 CA:16 NH:15 NJ:12",18],["CREATIVE SOLUTIONS IN HEALTHCARE",150,17731,58,2.3,2.6,52.6,0,"TX:150",1],["TRILOGY HEALTH SERVICES",127,8491,85,4.2,4.6,40.7,0,"IN:62 OH:35 KY:14 MI:14 WI:2",5],["SABER HEALTHCARE GROUP",126,13568,86,3,3.6,47.2,0,"PA:37 VA:33 NC:27 OH:27 DE:1 IN:1",6],["AVIR HEALTH GROUP",118,12935,61,2.2,2.7,57.2,7,"TX:118",1],["COMMUNICARE HEALTH",109,11794,87,3.3,3.9,43.2,0,"WV:41 OH:37 IN:18 MD:8 VA:5",5],["PRUITTHEALTH",97,10607,85,3.1,3.3,42.2,0,"GA:61 NC:15 SC:15 FL:6",4],["LEGACY HEALTHCARE",96,12079,79,3,3,46.2,2,"IL:42 IA:35 SD:13 AL:6",4],["GOOD SAMARITAN SOCIETY",92,5883,81,3,3.1,44.2,0,"MN:23 IA:16 NE:15 SD:13 KS:11 ND:10",9],["AMERICAN SENIOR COMMUNITIES",90,8948,77,3.9,3.7,43.6,0,"IN:90",1],["MARQUIS HEALTH SERVICES",90,12535,88,3,4.1,42.1,0,"PA:21 MA:19 NJ:17 VA:15 RI:7 MD:6",9],["COMPLETE CARE",85,12081,82,3.3,4.1,46.6,0,"NJ:43 WI:13 MD:10 CT:8 DE:3 IL:3",8],["CIENA HEALTHCARE/LAUREL HEALTH CARE",80,9270,85,2.9,3.4,43.5,0,"MI:51 OH:19 NC:6 VA:4",4],["SIMCHA HYMAN & NAFTALI ZANZIPER",79,7985,84,2.8,2.7,49.5,0,"KY:24 FL:23 NC:14 TN:10 OH:7 VA:1",6],["NATIONAL HEALTHCARE CORPORATION",72,8979,86,4.1,4.5,46.2,0,"TN:37 SC:18 MO:9 AL:2 GA:2 NC:2",8],["INFINITY HEALTHCARE CONSULTING",70,8723,71,2.2,2.6,46.2,0,"IN:36 TN:18 IL:16",3],["OPCO SKILLED MANAGEMENT",68,8166,73,2.4,3.5,54.5,2,"TX:27 NM:24 MO:14 AZ:3",4],["SIGNATURE HEALTHCARE",67,7618,77,3.1,3.5,43.5,0,"KY:38 TN:21 IN:4 NC:3 VA:1",5],["WELLSENTIAL HEALTH",67,8695,76,2.8,3.4,42.8,0,"TX:67",1],["FUNDAMENTAL HEALTHCARE",66,7858,77,2.5,3.3,46.5,0,"TX:24 SC:23 MD:11 NV:6 IN:1 WI:1",6],["FOUNDATIONS HEALTH SOLUTIONS",64,6198,89,4.2,2.6,40.2,0,"OH:64",1],["LIFEWORKS REHAB",64,8716,94,2.2,3.5,54.6,0,"VA:35 NC:16 MD:10 DE:2 PA:1",5],["AUTUMN LAKE HEALTHCARE",59,8005,88,2.9,4.2,44.2,0,"MD:37 NJ:11 CT:7 WV:2 WI:2",5],["NORTH SHORE HEALTHCARE",57,3738,66,2.8,2.6,39.4,0,"WI:53 MN:2 MI:1 ND:1",4],["JAMES & JUDY LINCOLN",55,5461,66,2.6,2.8,57,0,"MO:53 AR:2",2],["MEDILODGE",53,5646,86,3.2,3.4,45.1,0,"MI:53",1],["NEXION HEALTH",51,5407,71,2.3,2.2,44.3,0,"TX:26 MS:13 LA:12",3],["AVIATA HEALTH GROUP",50,6045,88,2.3,2.8,49.8,0,"FL:50",1],["ETHICA HEALTH",50,4822,82,3.5,2.4,43.6,0,"GA:50",1],["DAVID JOHNSON",50,5433,91,3.2,3.5,35.5,2,"CA:48 NV:2",2],["BENJAMIN LANDA",48,6352,88,3.4,2.9,41.7,0,"FL:19 KY:17 NY:10 NJ:2",4],["THE BEEBE FAMILY",48,4931,84,2.9,2,46,0,"LA:24 MS:24",2],["CASCADIA HEALTHCARE",47,3848,79,3.2,4,52.1,2,"ID:25 WA:10 OR:7 MT:3 AZ:2",5],["MONARCH HEALTHCARE MANAGEMENT",45,3423,83,2.1,2.5,46.7,0,"MN:45",1],["ACCURA HEALTHCARE",44,2380,82,2.7,3,43.8,0,"IA:28 NE:7 MN:6 SD:3",4],["DIVERSICARE HEALTHCARE",44,4744,77,2.7,3.2,46.1,0,"AL:19 MS:12 KS:6 TX:4 TN:3",5],["CARE INITIATIVES",43,2764,82,3,3,42,0,"IA:43",1],["HILL VALLEY HEALTHCARE",43,5452,88,1.9,3.4,52.4,0,"VA:24 WA:8 WV:7 OR:2 MD:1 TN:1",6],["LIFE CARE SERVICES",43,2901,80,4.2,4.1,36.8,0,"NC:7 IL:4 TX:4 FL:3 IN:3 IA:3",18],["NHS MANAGEMENT",43,5530,90,2.9,3.1,49.8,0,"AL:33 AR:5 FL:5",3],["SOVEREIGN HEALTHCARE HOLDINGS",43,5407,85,3.8,4.4,44.7,0,"FL:31 NC:10 GA:2",3],["EVERGREEN HEALTHCARE GROUP",43,4078,69,2.3,2.5,51.6,0,"WA:11 OR:8 WY:8 MT:6 SD:6 NV:4",6],["NATIONAL HEALTH CARE ASSOCIATES",42,5506,91,3.2,3.8,35.8,0,"CT:24 ME:8 NY:6 VT:2 MA:1 NH:1",6],["CORPORATE INTERFACE SERVICES",40,3844,86,2.7,3.6,46.3,0,"CA:40",1],["ANTHONY & BRYAN ADAMS",38,4103,73,3.9,3.8,52.2,0,"AR:34 MO:4",2],["CENTRAL ARKANSAS NURSING CENTERS",38,4145,82,3.6,3.6,49.9,0,"AR:35 OK:3",2],["LONGWOOD MANAGEMENT CORPORATION",38,4420,93,2.2,3.2,39.2,0,"CA:38",1],["PRIORITY MANAGEMENT",38,5051,71,2.7,2.6,52.8,1,"LA:20 TX:18",2],["ASTON HEALTH",38,5023,89,2.7,2.9,54,0,"FL:38",1],["AVARDIS HEALTH",38,3968,81,2.1,3,51.1,0,"NC:16 VA:11 MS:6 PA:5",4],["CANTEX CONTINUING CARE",37,4399,80,3.3,3.6,46.6,0,"TX:37",1],["CAREONE",37,5217,81,3.5,4.3,28.8,0,"NJ:20 MA:15 CT:1 PA:1",4],["LIBERTY SENIOR LIVING",37,3898,85,2.9,3.1,52.5,1,"NC:36 TN:1",2],["PRINCIPLE LONG TERM CARE",37,4848,74,2.9,2.8,49.5,0,"NC:36 VA:1",2],["CENTERS HEALTH CARE",36,6455,93,2.3,3.2,49.5,0,"NY:34 NJ:2",2],["CIRCLE B ENTERPRISES",36,3549,65,2.6,2.1,58.6,0,"MO:32 AZ:4",2],["GOLD FL TRUST II",36,4377,90,3.4,3.9,45.2,0,"FL:36",1],["OPTALIS HEALTH & REHABILITATION",36,4602,79,2.5,3.9,54.9,0,"MI:27 OH:9",2],["ASPEN SKILLED HEALTHCARE",35,3121,89,3.7,4.3,37.9,0,"CA:34 AZ:1",2],["RELIANT CARE MANAGEMENT",35,3503,81,1.3,2.4,69.2,0,"MO:34 KS:1",2],["SOUTHERN ADMINISTRATIVE SERVICES",35,3884,72,3.9,4.3,42.1,0,"AR:35",1],["CARERITE CENTERS",34,6471,93,3.8,4.7,40.8,0,"NY:18 TN:9 FL:6 NJ:1",4],["EDURO HEALTHCARE",34,3711,66,2.4,2.6,57.4,1,"TX:20 MT:7 SD:3 CA:1 NM:1 ND:1",7],["JOURNEY HEALTHCARE",34,3569,84,1.8,2.2,55.1,0,"GA:23 KY:6 WV:3 OH:2",4],["APERION CARE",33,4201,80,2.1,2.3,43.2,0,"IL:21 IN:12",2],["BRIDGES HEALTH",33,3826,63,3.4,1.8,52.1,0,"OK:33",1],["CCH HEALTHCARE",33,3712,80,2.7,3.2,59.4,0,"OH:16 NC:15 TN:2",3],["EMBASSY HEALTHCARE",33,3164,74,2.1,3,49.1,0,"OH:21 PA:12",2],["EXCELSIOR CARE GROUP",33,5584,94,2.8,3.4,41.3,0,"FL:20 NY:7 NJ:6",3],["CAMBRIDGE HEALTHCARE SERVICES",32,3316,92,2.6,3.3,37.2,0,"CA:32",1],["LINKS HEALTHCARE GROUP",32,3824,91,3.1,3.4,43,0,"CA:25 TN:7",2],["HMG HEALTHCARE",31,3870,73,3.2,4.1,51.3,0,"TX:29 KS:2",2],["ATLAS HEALTHCARE",30,4004,92,3.5,4.1,47.1,0,"NJ:12 MA:8 CT:7 MD:3",4],["VENZA CARE MANAGEMENT",30,3696,86,2.4,2.3,54,0,"AL:13 KY:8 LA:3 NC:2 DE:1 MD:1",8],["MAJESTIC CARE",29,3339,75,2.6,3.2,51.4,0,"IN:14 OH:12 MI:3",3],["MISSION HEALTH COMMUNITIES",29,1773,82,3,2.9,46.7,0,"KS:27 MN:1 WI:1",3],["ADVANCED HEALTHCARE SOLUTIONS",28,3379,67,3,3.1,47.7,0,"TX:28",1],["LIONSTONE CARE",28,2036,89,2.8,3.6,55.3,0,"OH:28",1],["ACTS RETIREMENT-LIFE COMMUNITIES",27,1111,51,4.9,4.6,23.9,0,"PA:7 FL:6 MD:4 DE:3 AL:2 NC:2",9],["AVAMERE",27,2710,67,3.3,3.9,37.2,0,"OR:16 WA:11",2],["GENERATIONS HEALTHCARE",27,2896,90,4.1,4.3,34.3,0,"CA:26 NV:1",2],["MGM HEALTHCARE",27,3516,77,2.4,2.9,62.3,1,"MO:14 OK:13",2],["RECOVER-CARE HEALTHCARE",27,2134,86,2.6,2.7,51.6,0,"KS:25 CO:1 OH:1",3],["REGENCY PACIFIC MANAGEMENT",27,2066,73,4,3.9,43.2,0,"WA:16 OR:10 HI:1",3],["THE ALDEN NETWORK",27,4590,75,2.9,2.7,39.2,0,"IL:25 WI:2",2],["ADVANCED HEALTH CARE",26,1070,88,4.7,4.8,47.3,0,"UT:6 NV:5 AZ:3 CO:3 ID:2 OH:2",11],["ATRIUM CENTERS",26,1699,79,2.9,3,48.1,0,"MI:16 OH:4 WI:4 KY:2",4],["THE SPRINGS ARKANSAS",26,3049,67,3.5,3.1,53.5,0,"AR:26",1],["ARCADIA CARE",25,3044,67,1.7,2.3,46.4,0,"IL:22 OH:3",2],["CAMPBELL STREET SERVICES",25,1572,76,2,3.2,72.1,1,"IA:21 KS:3 MN:1",3],["FOCUSED POST ACUTE CARE PARTNERS",25,2875,63,2,2.4,52.1,0,"TX:25",1],["TOUCHSTONE COMMUNITIES",25,3213,76,2.8,3,47.3,0,"TX:25",1],["STONEGATE SENIOR LIVING",24,2722,74,2.5,3.1,55.8,0,"TX:13 OK:11",2],["TUTERA SENIOR LIVING & HEALTH CARE",24,2322,79,2.3,2.7,54.9,0,"IL:11 MO:7 KS:4 AL:1 IA:1",5],["AMERICARE SENIOR LIVING",23,1512,79,3.6,3.4,47.7,0,"KS:13 MO:10",2],["BENEDICTINE HEALTH SYSTEM",23,1826,89,2.8,2.8,48.5,0,"MN:14 ND:6 MO:2 WI:1",4],["BRICKYARD HEALTHCARE",23,2747,74,2.7,2.9,46.5,0,"IN:23",1],["CHAMPION CARE",23,2445,74,2.4,2,52.9,0,"WI:13 TN:8 NJ:2",3],["THE BLOSSOMS REHAB & NURSING CENTER",23,2701,70,2.6,2.1,57.4,0,"AR:23",1],["ALTERCARE",22,1736,85,3.2,4,51.9,0,"OH:22",1],["EPHRAM LAHASKY",22,2112,81,1.8,2.6,54,0,"MA:6 MN:4 OH:4 MD:2 NH:2 AL:1",9],["HARBORVIEW HEALTH SYSTEMS",22,2742,91,2,1.8,50,1,"GA:12 FL:6 NC:4",3],["HCF MANAGEMENT",22,2116,86,2.9,2.8,40.6,0,"OH:15 PA:7",2],["IGNITE MEDICAL RESORTS",22,1997,82,3,4.5,54.7,0,"TX:7 MO:5 OK:4 IN:3 IL:2 KS:1",6],["SOLARIS HEALTHCARE",22,2953,94,4.1,4,34.5,0,"FL:22",1],["VETTER SENIOR LIVING",22,2002,85,4.1,3.5,34.8,0,"NE:21 MO:1",2],["WINDSOR",22,2725,86,2.5,3.5,36.9,0,"CA:22",1],["STERN CONSULTANTS",22,2084,72,2.7,3,44.1,2,"IL:14 MA:7 NY:1",3],["THE CHARLY BELLO FAMILY, THE MAZE FAMILY, THE SWAIN FAMILY, & WALTER MYERS",22,1890,83,1.8,3.2,54.2,0,"CO:10 MT:8 NV:4",3],["SUMMIT CARE",22,2742,88,3.3,3.4,46.1,0,"FL:22",1],["ALLAIRE HEALTH SERVICES",21,3507,82,2.8,4.2,51.4,0,"NJ:8 PA:8 VT:4 FL:1",4],["CENTRAL MANAGEMENT COMPANY",21,2624,83,2.7,2.4,42.3,0,"LA:21",1],["EDEN SENIOR CARE",21,2039,70,2.5,2.8,47.3,0,"WI:12 MN:5 PA:4",3],["EMPIRE CARE CENTERS",21,3430,85,1.8,2.7,54.5,0,"GA:21",1],["PRESBYTERIAN HOMES & SERVICES",21,1520,90,4.2,3.3,34.5,0,"MN:14 IA:6 WI:1",3],["VILLA HEALTHCARE",21,2971,83,2.6,3.1,47.9,0,"MI:20 OH:1",2],["PERSONAL HEALTHCARE MANAGEMENT",21,2493,89,2.9,2.6,46.7,0,"NY:18 MA:3",2],["AOM HEALTHCARE",20,1482,83,2.9,2.6,59.8,0,"OH:20",1],["APPLE REHAB",20,1988,81,1.9,3.5,null,0,"CT:19 RI:1",2],["GULF COAST LTC PARTNERS",20,1876,60,2.4,2.5,56.2,0,"TX:20",1],["HAVEN HEALTH",20,1929,82,2.9,4.4,44.2,0,"AZ:20",1],["NEXCARE HEALTH SYSTEMS",20,2236,88,4,3.8,41.8,0,"MI:20",1],["OTTERBEIN SENIORLIFE",20,1344,87,3.4,3.5,47.9,0,"OH:19 IN:1",2],["TLC MANAGEMENT",20,2262,87,3.9,4.3,43.1,0,"IN:15 FL:4 OH:1",3],["ABRAHAM BAK & MENACHEM GASTWIRTH",19,1687,92,2.6,3.3,34.9,1,"CA:19",1],["ATHENA HEALTHCARE SYSTEMS",19,2407,88,1.6,1.9,31.3,0,"MA:14 CT:5",2],["CARDON & ASSOCIATES",19,2210,86,3.7,4.6,52.8,0,"IN:19",1],["CASCADES HEALTHCARE",19,1761,61,2.1,3.9,63.5,0,"UT:10 ID:5 TX:3 WA:1",4],["CITADEL HEALTHCARE",19,2290,86,3.2,2.9,40.8,0,"IL:15 OH:4",2],["COMMCARE CORPORATION",19,2664,85,3.5,3,46.2,0,"LA:14 MS:5",2],["KALESTA HEALTHCARE GROUP",19,1757,93,2.6,3.6,47.3,0,"CA:9 WA:8 OR:2",3],["COMMONSPIRIT HEALTH",18,1624,79,2.7,3.6,46.2,0,"CA:5 OH:5 MN:2 CO:1 IA:1 KY:1",9],["CROWNE HEALTH CARE",18,1785,87,4.2,3.3,36.7,0,"AL:18",1],["FUTURE CARE/LIFEBRIDGE HEALTH",18,2616,97,3.9,4.3,41.4,0,"MD:18",1],["MEDICALODGES, INC.",18,1145,69,2.6,3.9,53.6,0,"KS:14 MO:3 OK:1",3],["SANSTONE HEALTH & REHABILITATION",18,2111,85,4.3,4.3,39.7,0,"NC:18",1],["TRINITY HEALTH",18,1891,78,3.4,3.7,39.8,0,"MI:6 NY:6 CT:1 IL:1 IN:1 IA:1",8],["WLC MANAGEMENT FIRM",18,1565,68,2.8,1.6,43.4,0,"IL:18",1],["EASTERN HEALTHCARE GROUP",18,2139,81,1.5,2.9,60.6,0,"VA:18",1],["JONATHAN BLEIER",18,3356,93,2.4,3.6,45.8,0,"PA:8 NY:6 FL:3 NJ:1",4],["THE MANDELBAUM FAMILY",18,1702,89,3.2,3.9,33.9,0,"CA:17 WA:1",2],["COMMUNITY ELDERCARE SERVICES",17,1367,73,2.1,2,46.2,0,"MS:12 TN:5",2],["ELDERWOOD",17,2219,88,2.2,3.6,60.1,0,"NY:15 RI:1 VT:1",3],["FLORIDA INSTITUTE FOR LONG-TERM CARE",17,2293,93,2.2,2.8,37.2,0,"FL:17",1],["HUMANGOOD",17,1074,83,4.5,3.9,30.8,0,"CA:10 WA:2 AZ:1 ID:1 NV:1 OR:1",7],["MARINER HEALTH CARE",17,1880,91,3.5,4.3,38.3,0,"CA:17",1],["UPSTATE SERVICES GROUP",17,3058,93,2,2.1,51.7,0,"NY:17",1],["CENTER MANAGEMENT GROUP",17,3730,93,3.4,4.2,42.4,0,"NJ:6 NY:6 PA:4 CT:1",4],["PARADIGM HEALTHCARE",17,1924,69,2.1,3.2,57.1,0,"TX:15 OH:2",2],["ERICKSON SENIOR LIVING",17,1119,84,4.4,4.3,35.3,0,"NJ:3 MD:2 MA:2 PA:2 VA:2 TX:2",10],["AHAVA HEALTHCARE",16,1990,74,2.4,2.9,56.3,0,"TN:13 FL:1 SC:1 VA:1",4],["ARBORS AT OHIO",16,1512,84,3,2.3,47.3,0,"OH:16",1],["ASPIRE SENIOR LIVING",16,1442,76,2.1,2.9,56.9,5,"MO:16",1],["AVALON HEALTH CARE",16,1537,86,3.6,4.1,40.1,0,"WA:8 UT:4 CA:2 HI:1 OR:1",5],["CARESPRING",16,2014,92,4.3,4.1,49.6,0,"OH:12 KY:4",2],["CASSIA",16,1315,90,4.5,3.9,39.2,0,"MN:11 IA:2 ND:2 CO:1",4],["COVENANT LIVING",16,974,84,4.6,3.9,36.8,0,"IL:4 CA:3 CO:1 CT:1 FL:1 MI:1",11],["HEALTH SERVICES MANAGEMENT",16,1865,71,3.1,2.9,52.6,0,"TX:10 FL:6",2],["PLANTATION MANAGEMENT COMPANY",16,2415,86,1.8,1.8,48.5,0,"LA:16",1],["THE GRAND HEALTHCARE",16,2640,96,2.1,1.5,42.3,0,"NY:16",1],["AJC HEALTHCARE",16,1194,93,2.4,2.7,45.8,0,"CA:15 KS:1",2],["VOLARE HEALTH",16,1982,74,1.6,3.4,null,0,"OR:11 LA:4 HI:1",3],["THE ROSENBERG FAMILY",16,2936,85,2.9,3.6,43.8,0,"NJ:6 PA:4 GA:3 OH:2 SC:1",5],["ALLURE HEALTHCARE SERVICES",15,1548,72,2.7,2.2,41.1,0,"IL:15",1],["BGM ESTATE",15,1393,46,1.9,2.5,53.5,0,"OK:15",1],["HEALTHPEAK PROPERTIES, INC.",15,1119,80,3.8,4,40.8,0,"FL:8 PA:2 TX:2 AL:1 MI:1 VA:1",6],["HERITAGE HALL",15,1668,86,4,4.2,38.2,0,"VA:15",1],["LIFESPACE COMMUNITIES",15,915,87,4.6,4.3,39.7,0,"FL:4 TX:4 IL:3 KS:1 MN:1 PA:1",7],["LME FAMILY HOLDINGS",15,1778,81,2.3,2.5,52.1,0,"PA:11 MA:2 MI:1 NE:1",4],["MARQUIS COMPANIES",15,1374,73,4.1,3.9,38.8,0,"OR:12 NV:2 CA:1",3],["PRESTIGE HEALTHCARE ADMINISTRATIVE SERVICES",15,2354,88,3.3,4,43,0,"PA:10 DE:4 DC:1",3],["THE ORCHARDS MICHIGAN",15,1699,81,1.7,2.7,48.4,2,"MI:15",1],["TREND CONSULTANTS",15,1056,91,3.3,2.3,39.8,0,"MS:15",1],["PEARL HEALTHCARE",15,2238,77,2.7,2.9,45.2,0,"IL:15",1],["VERTICAL HEALTH SERVICES",15,1939,75,2.1,2.5,58,0,"MO:11 WA:3 TN:1",3],["BLUEGRASS HEALTH KY",15,1457,94,3.1,3.3,43.4,0,"KY:15",1],["PACIFIC HEALTHCARE HOLDINGS",15,1624,92,2.1,3.1,31.6,0,"CA:15",1],["ADVINIACARE",14,1669,75,1.9,2.4,34.6,0,"RI:7 MA:5 FL:2",3],["CARING HEALTHCARE GROUP",14,1786,68,2.8,2.8,50.9,0,"TX:14",1],["CERTUS HEALTHCARE",14,1584,72,1.8,2.6,40.2,3,"OH:10 MI:4",2],["ELEVATE CARE",14,3273,69,2.3,2.6,36.6,0,"IL:13 FL:1",2],["KADIMA HEALTHCARE GROUP",14,1052,92,2,2,60.4,0,"PA:14",1],["MILLER'S MERRY MANOR",14,1406,59,3.7,3.3,47.8,0,"IN:14",1],["MISSION POINT HEALTHCARE SERVICES",14,1096,86,3,3.7,46.6,0,"MI:14",1],["NEXT STEP HEALTHCARE",14,1667,79,1.7,1.8,38.1,0,"MA:14",1],["PALM GARDEN HEALTH AND REHABILITATION",14,1984,93,3.1,3.5,43,0,"FL:14",1],["PARAMOUNT HEALTHCARE CONSULTANTS",14,1588,59,2.4,1.9,49.9,0,"LA:13 TX:1",2],["ST. FRANCIS HEALTH SERVICES",14,820,88,2.9,4,41,0,"MN:14",1],["WELLINGTON HEALTH CARE SERVICES",14,1943,92,1.9,1.6,48.9,0,"GA:10 TN:2 AL:1 LA:1",4],["INTEGRITUS HEALTHCARE",14,1955,85,2.9,2.4,41.8,0,"MA:14",1],["EMERALD HEALTHCARE",14,1851,61,1.3,1.9,60.1,0,"NE:8 OK:5 KY:1",3],["YAD HEALTHCARE",14,1425,86,1.5,2.3,64.9,0,"NC:9 VA:4 SC:1",3],["ALIYA HEALTHCARE",14,2264,76,2.2,3.2,43.4,0,"IL:14",1],["SPYGLASS HEALTHCARE",14,1429,97,3.1,4,39.5,0,"CA:14",1],["ELIYAHU MIRLIS",14,1334,94,1.9,2.7,47.5,0,"FL:11 GA:2 SC:1",3],["VENTURA SERVICES",14,2846,88,3.3,3.3,31.2,0,"FL:14",1],["AMA HOLDINGS",13,1823,77,1.9,1.5,66.8,0,"MO:13",1],["AVERA HEALTH",13,948,92,4.1,3.5,40.8,0,"SD:9 MN:3 NE:1",3],["CASSENA CARE",13,3929,88,4,4.3,37.6,0,"NY:13",1],["CONTINUUM HEALTHCARE",13,1195,86,2.5,3.1,43.1,0,"PA:4 NJ:3 AR:2 IN:2 OH:1 WI:1",6],["CYPRESS HEALTHCARE GROUP",13,1147,94,4,4.2,33.6,0,"CA:13",1],["ENVIVE HEALTHCARE",13,1214,58,2.3,3.9,46.9,0,"IN:13",1],["HELIA HEALTHCARE",13,1461,55,2.2,2.8,48.9,0,"IL:11 MO:2",2],["HURLBUT CARE",13,1037,82,3.9,3,52.6,0,"NY:13",1],["MADISON CREEK PARTNERS",13,1244,86,3.2,3.5,47.4,0,"CO:8 CA:5",2],["PREFERRED CARE",13,1614,87,3.6,4.2,51.2,0,"NJ:7 MI:6",2],["PRESBYTERIAN MANORS OF MID-AMERICA",13,699,84,3.8,3.1,53.7,0,"KS:11 MO:2",2],["VANCREST HEALTH CARE CENTERS",13,1023,85,4.1,3.9,41.8,0,"OH:13",1],["VERITAS MANAGEMENT GROUP",13,1110,75,4.2,4.9,50,0,"CO:5 AZ:3 TX:3 DE:1 KS:1",5],["WECARE CENTERS",13,1561,71,2.1,3.7,54.3,0,"PA:12 NY:1",2],["ALLIANCE HEALTH GROUP",13,1355,88,1.8,1.7,50.9,0,"NC:13",1],["RIGHTCARE HEALTH SERVICES",13,1359,73,2.8,2.2,40.4,0,"LA:13",1],["LYON HEALTHCARE",13,1667,81,1.6,2,51.1,0,"KY:8 TN:4 OR:1",3],["ASCENSION LIVING",12,1568,71,2.9,3.9,53.2,0,"WI:3 IL:2 KS:2 DC:1 IN:1 NY:1",8],["ATIED ASSOCIATES",12,1747,74,2.1,3,39.1,0,"IL:9 AZ:2 MI:1",3],["BVHC, LLC",12,900,93,3.4,3.1,39.4,0,"CA:12",1],["BROOKDALE SENIOR LIVING",12,923,71,3.6,4.5,47.1,0,"TX:3 CO:2 KS:2 AL:1 AZ:1 NC:1",8],["CARECORE HEALTH",12,1178,75,2.5,2.4,57.3,0,"OH:12",1],["COMMONWEALTH CARE OF ROANOKE",12,1390,96,3.9,4.1,42.6,0,"VA:12",1],["CONTINUING HEALTHCARE SOLUTIONS",12,879,87,2.3,1.9,48.7,0,"OH:12",1],["DELMAR GARDENS",12,2193,78,3.1,2.3,45.4,0,"MO:7 GA:2 KS:2 NE:1",4],["ICARE HEALTH NETWORK",12,1562,94,3.1,4,34.4,0,"CT:10 MA:1 VT:1",3],["MB HEALTHCARE",12,1536,85,3.9,4.3,44.7,0,"NJ:10 PA:2",2],["NAHS",12,838,87,4,4.3,35,0,"CA:12",1],["PRIORITY HEALTHCARE GROUP",12,1423,86,3,2.8,48.6,0,"PA:10 MI:1 VT:1",3],["ROYAL HEALTH GROUP",12,1190,80,3.2,3.2,46.2,0,"MA:10 RI:2",2],["SPRENGER HEALTH CARE SYSTEMS",12,1165,89,3.6,3.2,48.5,0,"OH:10 SC:2",2],["STONEBRIDGE SENIOR LIVING",12,1233,64,3.4,2.7,58.8,0,"MO:12",1],["ARABELLA HEALTHCARE MANAGEMENT",12,1289,72,2.5,2.5,62.7,0,"AL:11 MS:1",2],["VIVO HEALTHCARE",12,1455,90,2.4,3.4,48.2,0,"FL:12",1],["ENCORE HEALTH PARTNERS",12,925,91,3.6,2.8,44.4,0,"KY:12",1],["VALLEY WEST HEALTH",12,1385,85,3.3,2.4,42.6,0,"PA:11 NV:1",2],["POINTE MANAGEMENT",12,1196,61,1.3,1.4,53.6,0,"IL:10 AR:1 MO:1",3],["SKYBLUE HEALTHCARE",12,1266,51,2.3,2.8,57.5,0,"OK:9 TX:3",2],["AVANTE CENTERS",11,1408,84,2.4,2.5,48.5,0,"FL:11",1],["AVENTURA HEALTH GROUP",11,1444,79,1.9,3.1,55.9,0,"OH:7 PA:3 FL:1",3],["AYDEN HEALTHCARE",11,1040,78,2.4,3,50.2,0,"OH:11",1],["BEACON HEALTH MANAGEMENT",11,960,75,1.5,2.6,46.1,0,"GA:10 IA:1",2],["BRADFORD MONTGOMERY",11,941,60,2.6,1,62.4,0,"OK:10 AR:1",2],["CONSULATE HEALTH CARE/INDEPENDENCE LIVING CENTERS/NSPIRE HEALTHCARE/RAYDIANT HEALTH CARE",11,1175,87,2.5,2.5,42.2,0,"FL:6 MS:5",2],["DOVE HEALTHCARE",11,647,77,3.5,3.7,47.8,0,"WI:11",1],["ELMBROOK MANAGEMENT COMPANY",11,1057,51,3.5,2.3,55,0,"OK:11",1],["FIRST ATLANTIC HEALTHCARE",11,865,88,3.4,3.3,45.6,0,"ME:11",1],["LEGACY NURSING & REHABILITATION",11,1358,82,1.6,2,51.5,0,"LA:9 TX:2",2],["MIDWEST HEALTH",11,726,64,3.7,2.9,50.4,0,"KS:10 MO:1",2],["OCEAN HEALTHCARE",11,2109,92,3,4.6,33.8,0,"NJ:11",1],["OHIO LIVING COMMUNITIES",11,464,90,4,4.5,44.1,0,"OH:11",1],["ONYX HEALTH",11,1479,91,4.2,3.5,32.1,0,"FL:11",1],["PARAGON HEALTHNET",11,1503,89,4.5,4.8,34.3,0,"NY:11",1],["PRESBYTERIAN SENIOR LIVING",11,816,86,3.3,3.7,40.7,0,"PA:9 DE:1 MD:1",3],["PROGRESSIVE QUALITY CARE",11,1042,81,2.8,4.1,55.9,0,"OH:11",1],["TWIN RIVERS HEALTH & REHABILITATION",11,809,80,3.8,3.5,53.4,0,"TN:11",1],["WINDSOR HOUSE, INC.",11,1013,86,3.7,1.3,37.8,0,"OH:11",1],["SERRANO GROUP",11,1235,90,2.1,3.5,42.8,0,"CA:11",1],["GOLDWATER CARE",11,1052,71,1.3,2.1,52.4,0,"IL:11",1],["AVID HEALTHCARE GROUP",11,877,65,1.9,2.5,66,0,"NE:11",1],["MONUMENT HEALTH GROUP",11,1215,64,3.1,3.8,50.7,0,"UT:11",1],["SABA HEALTHCARE",11,2279,77,1.8,1.3,38.9,0,"IL:11",1],["THE MAYER FAMILY",11,1468,91,2.8,3.5,43.1,0,"NY:9 CT:1 RI:1",3],["BRIA HEALTH SERVICES",10,1763,79,1.5,1.7,54,0,"IL:10",1],["CREST HEALTHCARE CONSULTING",10,928,78,2.4,2.8,51.7,0,"IL:10",1],["DAVID MARX",10,906,90,2.9,1.8,50.4,0,"KY:10",1],["FOURSQUARE HEALTHCARE",10,1240,88,3,3.7,48.1,0,"TX:10",1],["IDE MANAGEMENT GROUP",10,708,80,3,1.5,51.9,0,"IN:10",1],["LEGACY HEALTH SERVICES",10,1495,85,3.4,4.4,55.2,0,"OH:10",1],["NOLAND HEALTH",10,1272,83,2.7,2.8,50,0,"AL:10",1],["PACIFIC RETIREMENT SERVICES",10,517,63,4.6,4.2,39.6,0,"OR:4 CA:3 AZ:1 WI:1 TX:1",5],["QUALITY LIFE SERVICES",10,1007,87,2.8,4,52.8,0,"PA:10",1],["REGALCARE",10,1315,78,1.6,2,33.4,0,"MA:10",1],["ROCKY MOUNTAIN CARE",10,913,77,3,4.7,53.4,0,"UT:8 WY:2",2],["SOUTHWEST LTC",10,1036,61,2.3,1.7,59.5,0,"OK:6 TX:4",2],["THE PEPLINSKI GROUP",10,949,80,2.3,3.1,53.8,0,"MI:10",1],["UNLIMITED DEVELOPMENT, INC.",10,1191,79,2.1,2.5,44.6,0,"IL:9 IA:1",2],["VI LIVING",10,444,90,4.5,4.4,28.8,0,"FL:3 AZ:2 CA:2 CO:1 IL:1 SC:1",6],["WESLEYLIFE",10,600,93,3.6,4.1,45.3,0,"IA:10",1],["BEST CARE SERVICES",10,1379,82,2.4,2.1,37.5,0,"MA:8 NJ:2",2],["HAMILTON COUNTY HOSPITAL DISTRICT",10,1109,75,2.7,2.6,48.9,0,"TX:10",1],["SHLOMO HOFFMAN",10,1011,74,2.3,3.8,52.1,0,"IA:6 WI:4",2],["EXCEPTIONAL LIVING CENTERS",10,1006,79,3.3,3.4,51.7,0,"OH:4 IN:3 TN:3",3],["HAVEN HEALTHCARE",10,755,70,1.3,1.3,52.5,0,"IL:10",1],["PARAMOUNT CARE CENTERS",10,1850,94,3.4,4.3,39.8,0,"NJ:6 PA:4",2],["AVINA HEALTHCARE",10,900,65,2.2,2.8,48.9,0,"WI:10",1],["HEALTH DIMENSIONS GROUP",10,670,83,3.3,3.5,45.2,0,"WI:4 MN:2 IA:1 NV:1 PA:1 TX:1",6],["FL SNF TRUST",10,1112,94,3.5,3.8,34.8,0,"FL:10",1]];
+
+// Operators shown as customers on exacare.com (logos / customer stories), and an advisory-board connection
+const CUSTOMERS = new Set(["CREATIVE SOLUTIONS IN HEALTHCARE","IGNITE MEDICAL RESORTS","MAJESTIC CARE","MONARCH HEALTHCARE MANAGEMENT","NATIONAL HEALTH CARE ASSOCIATES","JOURNEY HEALTHCARE","PEARL HEALTHCARE","THE ALDEN NETWORK","BENEDICTINE HEALTH SYSTEM","EVERGREEN HEALTHCARE GROUP","EDEN SENIOR CARE","PACS GROUP","AVANTE CENTERS"]);
+const ADVISOR = {"HMG HEALTHCARE":"HMG's Chief Strategy Officer sits on exacare's advisory board"};
+
+const KEEP_UPPER = new Set(["LLC","II","INC","PACS","HMG","NHS","CCH","AOM","TLC","MGM","MB","NAHS","BVHC","WLC","HCF","AJC","BGM","LME","YAD","AMA","IDE","LTC","SNF","FL","KY","ACTS","OPCO","ICARE"]);
+function title(s){
+  return s.split(" ").map(w=>{
+    const bare=w.replace(/[^A-Z]/g,"");
+    if(KEEP_UPPER.has(bare)) return w;
+    return w.toLowerCase().replace(/(^|[\/\-(&.'])([a-z])/g,(m,a,b)=>a+b.toUpperCase()).replace(/^([a-z])/,c=>c.toUpperCase());
+  }).join(" ").replace(/\b(Of|And|For|At|The)\b/g,(m,_,i)=>i===0?m:m.toLowerCase()).replace(/^the /,"The ").replace(/'S\b/g,"'s");
+}
+
+const median = a => { a=a.filter(x=>x!=null).sort((x,y)=>x-y); return a[Math.floor(a.length/2)]; };
+const MED_TURN = median(RAW.map(r=>r[6]));
+const MAX_FAC = Math.max(...RAW.map(r=>r[1]));
+
+const ops = RAW.map(r=>{
+  const [raw,fac,beds,occ,star,ssqm,turn,chg,states,nstates]=r;
+  const empty = Math.max(0, Math.round(beds*(1-occ/100)));
+  const sSize = Math.min(1, Math.log(fac/10+1)/Math.log(MAX_FAC/10+1));
+  const sCensus = Math.max(0, Math.min(1,(92-occ)/30));
+  const sTurn = turn==null?0.4:Math.max(0,Math.min(1,(turn-35)/25));
+  const sSpread = nstates>=5?1:nstates>=3?.7:nstates===2?.4:.15;
+  const parts = {size:Math.round(40*sSize),census:Math.round(30*sCensus),turnover:Math.round(15*sTurn),spread:Math.round(15*sSpread)};
+  const fit = parts.size+parts.census+parts.turnover+parts.spread;
+  return {raw,name:title(raw),fac,beds,occ,star,ssqm,turn,chg,states,nstates,empty,parts,fit,customer:CUSTOMERS.has(raw),advisor:ADVISOR[raw]||null};
+});
+
+const $ = id => document.getElementById(id);
+let current = null;
+
+function stateList(o){
+  const pairs = o.states.split(" ").map(p=>p.split(":"));
+  const shown = pairs.map(([s,n])=>`${s} ${n}`).join(" · ");
+  return o.nstates>pairs.length ? `${shown} · +${o.nstates-pairs.length} more states` : shown;
+}
+function where(o){
+  const top = o.states.split(" ").map(p=>p.split(":")[0]);
+  if(o.nstates===1) return top[0];
+  if(o.nstates<=3) return top.join(", ").replace(/, ([^,]*)$/," and $1");
+  return `${o.nstates} states`;
+}
+
+function reasons(o){
+  const out=[];
+  if(o.occ<80) out.push(`Running at about ${o.occ}% occupancy, so roughly ${o.empty.toLocaleString()} certified beds sit empty on an average day. Saying yes to referrals faster is the most direct lever on that census gap.`);
+  else if(o.occ<88) out.push(`Occupancy is around ${o.occ}%, leaving about ${o.empty.toLocaleString()} open beds across the portfolio. There's still census to win from referrals they're currently losing to faster facilities.`);
+  else out.push(`Already well filled at about ${o.occ}% occupancy. Lead with reimbursement and staff time, since census isn't their biggest pain.`);
+  if(o.nstates>=3) out.push(`Spread across ${o.nstates} states, which usually means a centralized admissions team handling referrals from many hospital systems and portals. One inbox and consistent admit criteria per facility is the hook.`);
+  else if(o.fac>=40) out.push(`${o.fac} buildings concentrated in ${where(o)} is a lot of referral volume for a regional team, a good fit for organization-wide criteria with facility-specific rules.`);
+  if(o.turn!=null && o.turn>=MED_TURN+5) out.push(`Nursing staff turnover averages ${o.turn}%, above the ${MED_TURN}% typical for chains this size. Fewer hours spent reading 200-page packets matters more when teams are thin.`);
+  if(o.ssqm!=null && o.ssqm>=4) out.push(`Strong short-stay quality scores (${o.ssqm} of 5), which is the story hospitals care about. Response speed is what stands between them and more referrals.`);
+  if(o.star!=null && o.star<=2.3) out.push(`Lower average star rating (${o.star} of 5). Position the clinical risk flags: catching patients they can't safely support before they admit them.`);
+  if(o.chg>0) out.push(`${o.chg} ${o.chg===1?"facility":"facilities"} changed ownership in the last 12 months. New ownership often revisits the admissions stack.`);
+  return out;
+}
+
+function opener(o){
+  let hook;
+  if(o.occ<80) hook=`and a lot of operators your size tell us referrals are slipping to whoever answers the hospital first`;
+  else if(o.nstates>=3) hook=`and with that many buildings across ${o.nstates} states, I'm guessing referrals come in from a pile of different portals and fax lines`;
+  else if(o.turn!=null && o.turn>=MED_TURN+5) hook=`and I know staffing has been tough, so I'm curious how much time your admissions folks spend reading referral packets`;
+  else hook=`and we help teams like yours review referral packets in under a minute instead of hours`;
+  return `Hi [first name], this is [your name] with exacare ai. I'll be quick. I saw ${o.name} runs ${o.fac} facilities in ${where(o)}, ${hook}.\n\nHow long does it usually take your team to turn a hospital referral around right now?`;
+}
+
+function who(o){
+  if(o.fac>=40) return "Start with the VP or Director of Admissions / Business Development, then Regional Directors of Operations. The COO or Chief Strategy Officer signs off on platform decisions at this size.";
+  if(o.fac>=20) return "Director of Admissions or Business Development at the corporate level, plus the COO. Administrators at the largest buildings are good secondary contacts.";
+  return "The owner, CEO or COO is often reachable at this size. Administrators and admissions coordinators at each building feel the referral pain day to day.";
+}
+
+function fmt(v,suffix=""){ return v==null?"n/a":v+suffix; }
+
+function renderBrief(o){
+  current=o;
+  const chips=[];
+  chips.push(`<span class="chip">Fit ${o.fit}/100</span>`);
+  if(o.customer) chips.push(`<span class="chip info">Current exacare customer</span>`);
+  if(o.advisor) chips.push(`<span class="chip info">Advisory board connection</span>`);
+  if(o.occ<75) chips.push(`<span class="chip warn">Big census gap</span>`);
+  if(o.turn!=null && o.turn>=55) chips.push(`<span class="chip warn">High turnover</span>`);
+  if(o.chg>0) chips.push(`<span class="chip warn">Recent ownership change</span>`);
+  const bar=(label,v,max)=>`<div class="bar"><span>${label}</span><span class="track"><span class="fill" style="width:${v/max*100}%"></span></span><span class="n">${v}/${max}</span></div>`;
+  const note = o.customer ? `<p class="lede">Listed as a customer on exacare.com, so this one isn't a cold prospect. Useful as a reference account when calling similar operators.</p>` : o.advisor ? `<p class="lede">${o.advisor}. Warm intro territory rather than a cold call.</p>` : "";
+  $("brief").innerHTML = `
+    <div class="bhead">
+      <div class="eyebrow">Operator brief</div>
+      <h2>${o.name}</h2>
+      <div class="chips">${chips.join("")}</div>
+      ${note}
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="k">Facilities</span><span class="v">${o.fac}</span><span class="h">${o.nstates} ${o.nstates===1?"state":"states"}</span></div>
+      <div class="stat"><span class="k">Certified beds</span><span class="v">${o.beds.toLocaleString()}</span><span class="h">~${o.empty.toLocaleString()} empty daily</span></div>
+      <div class="stat"><span class="k">Occupancy</span><span class="v">${o.occ}%</span><span class="h">avg residents ÷ beds</span></div>
+      <div class="stat"><span class="k">Avg star rating</span><span class="v">${fmt(o.star)}</span><span class="h">CMS overall, of 5</span></div>
+      <div class="stat"><span class="k">Short-stay quality</span><span class="v">${fmt(o.ssqm)}</span><span class="h">rehab patients, of 5</span></div>
+      <div class="stat"><span class="k">Nursing turnover</span><span class="v">${fmt(o.turn,"%")}</span><span class="h">peer median ${MED_TURN}%</span></div>
+    </div>
+    <section><h3>Where they operate</h3><div class="states">${stateList(o)}</div></section>
+    <section><h3>Why they might care</h3><ul class="why">${reasons(o).map(r=>`<li>${r}</li>`).join("")}</ul></section>
+    <section><h3>Cold-call opener</h3>
+      <div class="opener" id="opener">${opener(o)}</div>
+      <div class="oprow"><button class="copy" id="copyBtn" type="button">Copy opener</button><span class="okmsg" id="okmsg" aria-live="polite"></span></div>
+    </section>
+    <section><h3>Who to ask for</h3><p class="who">${who(o)}</p></section>
+    <section><h3>How the fit score breaks down</h3><div class="score-break">
+      ${bar("Size",o.parts.size,40)}${bar("Census gap",o.parts.census,30)}${bar("Turnover",o.parts.turnover,15)}${bar("Multi-state",o.parts.spread,15)}
+    </div></section>`;
+  $("copyBtn").addEventListener("click",()=>{
+    const text=$("opener").innerText;
+    const done=m=>{$("okmsg").textContent=m;};
+    try{
+      navigator.clipboard.writeText(text).then(()=>done("Copied"),()=>{selectOpener();done("Selected, press Cmd/Ctrl+C");});
+    }catch(e){selectOpener();done("Selected, press Cmd/Ctrl+C");}
+  });
+  document.querySelectorAll(".item").forEach(b=>b.setAttribute("aria-current", b.dataset.raw===o.raw?"true":"false"));
+}
+function selectOpener(){const r=document.createRange();r.selectNodeContents($("opener"));const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+function renderList(){
+  const q=$("q").value.trim().toUpperCase();
+  const hide=$("hideCust").checked;
+  const sort=$("sort").value;
+  let rows=ops.filter(o=>!(hide&&o.customer));
+  if(q) rows=rows.filter(o=>o.raw.includes(q) || (q.length===2 && o.states.split(" ").some(p=>p.startsWith(q+":"))));
+  const key={fit:o=>o.fit,fac:o=>o.fac,empty:o=>o.empty,turn:o=>o.turn??-1}[sort];
+  rows.sort((a,b)=>key(b)-key(a));
+  const metric={fit:o=>o.fit,fac:o=>o.fac,empty:o=>o.empty.toLocaleString(),turn:o=>fmt(o.turn,"%")}[sort];
+  $("list").innerHTML = rows.map(o=>`<button class="item" role="listitem" data-raw="${o.raw.replace(/"/g,"&quot;")}" aria-current="${current&&current.raw===o.raw}">
+      <span class="nm">${o.name}${o.customer?" ·  customer":""}</span>
+      <span class="score">${metric(o)}</span>
+      <span class="sub">${o.fac} facilities · ${where(o)} · ${o.occ}% occupied</span>
+    </button>`).join("") || `<p class="lede" style="padding:14px">No operators match that search.</p>`;
+  $("count").textContent = `${rows.length} operators`;
+  $("list").querySelectorAll(".item").forEach(b=>b.addEventListener("click",()=>renderBrief(ops.find(o=>o.raw===b.dataset.raw))));
+  if(rows.length && (!current || !rows.includes(current))) renderBrief(rows[0]);
+}
+["q","sort","hideCust"].forEach(id=>$(id).addEventListener(id==="q"?"input":"change",renderList));
+renderList();
+
+// Market view: state totals across all 14,686 CMS facilities
+// [state, facilities, certifiedBeds, occupancy%, emptyBeds, %facilitiesInAChain]
+const US = {fac:14686, beds:1567009, occ:80, empty:312826, chainPct:70};
+const STATES = [["TX",1177,133481,67,44625,80],["IL",664,84864,74,22284,72],["PA",656,82992,82,14691,61],["MO",486,49938,71,14389,71],["OH",924,81248,83,13861,75],["CA",1165,114991,88,13540,73],["NY",592,111253,89,12310,51],["IN",507,48825,75,12132,85],["OK",283,27555,63,10332,53],["FL",694,84537,88,9864,77],["TN",303,34613,73,9328,76],["NJ",348,50998,83,8826,70]];
+
+function renderMarket(){
+  const prospects = ops.filter(o=>!o.customer);
+  const custFac = ops.filter(o=>o.customer).reduce((a,o)=>a+o.fac,0);
+  const prosFac = prospects.reduce((a,o)=>a+o.fac,0);
+  $("mstats").innerHTML = `
+    <div class="stat"><span class="k">U.S. nursing homes</span><span class="v">${US.fac.toLocaleString()}</span><span class="h">${US.chainPct}% belong to a chain</span></div>
+    <div class="stat"><span class="k">Empty beds, daily</span><span class="v">${Math.round(US.empty/1000)}k</span><span class="h">${US.occ}% national occupancy</span></div>
+    <div class="stat"><span class="k">Chains with 10+ homes</span><span class="v">${ops.length}</span><span class="h">${ops.filter(o=>o.customer).length} already exacare customers</span></div>
+    <div class="stat"><span class="k">Facilities to win</span><span class="v">${prosFac.toLocaleString()}</span><span class="h">in non-customer 10+ chains</span></div>`;
+  const max = STATES[0][4];
+  $("mchart").innerHTML = STATES.map(([s,f,b,occ,empty])=>`<div class="crow"><span class="s">${s}</span><span class="track"><span class="fill${occ<75?" hot":""}" style="width:${empty/max*100}%"></span></span><span class="n"><b>${(empty/1000).toFixed(1)}k</b> · ${occ}%</span></div>`).join("")
+    + `<p class="lede small" style="margin-top:6px">Orange marks states under 75% occupancy.</p>`;
+
+  const tx = STATES.find(s=>s[0]==="TX");
+  const mw = ["IL","MO","IN","OK"].map(c=>STATES.find(s=>s[0]===c));
+  const mwEmpty = mw.reduce((a,s)=>a+s[4],0);
+  const mwChains = prospects.filter(o=>o.fac<=60 && o.states.split(" ").some(p=>["IL","MO","IN","OK"].includes(p.split(":")[0]))).length;
+  const highTurn = prospects.filter(o=>o.turn!=null && o.turn>=55);
+  const txProspects = prospects.filter(o=>o.states.startsWith("TX:")).length;
+  $("mideas").innerHTML = `
+    <article class="idea"><span class="tag">Regional · Texas</span><h4>Texas census push</h4>
+      <p>Texas has the most empty beds in the country (${tx[4].toLocaleString()}) at just ${tx[3]}% occupancy. Creative Solutions, the state's largest operator, already runs exacare across 150 buildings, so there's a local proof point.</p>
+      <p class="ch">Channels: a Creative Solutions case study, a Texas-only email sequence to the ${txProspects} Texas-based chains here, and presence at Texas Health Care Association events.</p></article>
+    <article class="idea"><span class="tag">Regional · Midwest</span><h4>Mid-size Midwest chains</h4>
+      <p>Illinois, Missouri, Indiana and Oklahoma sit between ${Math.min(...mw.map(s=>s[3]))}% and ${Math.max(...mw.map(s=>s[3]))}% occupancy with ${Math.round(mwEmpty/1000)}k empty beds combined. ${mwChains} non-customer chains of 10 to 60 homes operate there, a size where one admissions director covers many buildings.</p>
+      <p class="ch">Channels: LinkedIn ads targeted to admissions and BD titles in those states, plus an "empty bed cost" calculator as the hook.</p></article>
+    <article class="idea"><span class="tag">Message · Staffing</span><h4>"Give your team their hours back"</h4>
+      <p>${highTurn.length} non-customer chains average 55%+ nursing turnover. For them, the pitch is less about AI and more about not having a short-staffed team read 200-page referral packets.</p>
+      <p class="ch">Channels: a one-pager on hours saved per referral, short testimonial clips from customer admissions staff, and a webinar for directors of nursing.</p></article>`;
+}
+renderMarket();
+
+function show(view){
+  const m=view==="market";
+  $("view-market").hidden=!m; $("view-briefs").hidden=m;
+  $("tab-market").setAttribute("aria-pressed",m); $("tab-briefs").setAttribute("aria-pressed",!m);
+}
+$("tab-market").addEventListener("click",()=>{show("market"); history.replaceState(null,"","#market");});
+$("tab-briefs").addEventListener("click",()=>{show("briefs"); history.replaceState(null,"","#briefs");});
+show(location.hash==="#briefs"?"briefs":"market");
+window.addEventListener("hashchange",()=>show(location.hash==="#briefs"?"briefs":"market"));
+</script>
